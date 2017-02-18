@@ -11,22 +11,22 @@
  * Base URL including trailing slash (e.g. http://localhost/)
  * @global string $config['base_url']
  */
-$config['base_url'] = 'http://tombayo.com/mna/';
+$config['base_url'] = 'https://midtnorgeairsoft.no/';
 /**
  * Selects whether or not url rewriting should be used for this application
  * @global bool $config['url_rewrite']
  */
-$config['url_rewrite'] = false; 
+$config['url_rewrite'] = true; 
 /**
  * Selects if the application should force the use of https
  * @global bool $config['force_https']
  */
-$config['force_https'] = false;
+$config['force_https'] = true;
 /**
  * Sets the script default error-reporting setting
  * @global bool $config['report_errors']
  */
-$config['report_errors'] = true;
+$config['report_errors'] = false;
 /**
  * The default controller to load
  * @global string $config['default_controller']
