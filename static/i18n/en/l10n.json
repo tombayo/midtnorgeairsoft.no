@@ -1,0 +1,20 @@
+{
+  "nav":{
+    "main":"Home",
+    "about":"About Us",
+    "airsoft":"What's Airsoft?",
+    "fields":"Our Fields"
+  },
+  "headers":{
+    "welcome":"Welcome to MNA"
+  },
+  "footer":{
+    "cookielink":"About Cookies",
+    "cookietitle":"Cookies",
+    "cookietxt":"This webpage utilizes cookies. The purpose of the use is to store user settings. Currently we only use cookies to store the user's language settings. This text will always relfect the current use of cookies, and will always be updated if the use changes.",
+    "techdetails":"Technical Details",
+    "license":"License",
+    "source":"Source Code",
+    "madeby":"Made By"
+  }
+}

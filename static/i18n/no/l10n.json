@@ -1,0 +1,24 @@
+{
+  "nav":{
+    "main":"Hjem",
+    "about":"Om Klubben",
+    "airsoft":"Hva er airsoft?",
+    "fields":"V\u00e5re Baner",
+    "information":"Informasjon",
+    "join":"Bli Medlem"
+  },
+  "headers":{
+    "welcome":"Velkommen til MNA",
+    "images":"Bilder",
+    "map":"Kart"
+  },
+  "footer":{
+    "cookielink":"Om Informasjonskapsler",
+    "cookietitle":"Informasjonskapsler",
+    "cookietxt":"Denne nettsiden benytter seg av informasjonskapsler (Cookies). Formålet med bruken er å lagre preferansene til våre besøkende. Vi bruker per i dag cookies kun til å huske brukernes språk-preferanse. Denne teksten vil alltid informere om den gjeldende bruken av cookies, og vil derfor oppdateres om bruken endres.",
+    "techdetails":"Tekniske detaljer om nettisden",
+    "license":"Lisens",
+    "source":"Kildekode",
+    "madeby":"Laget av"
+  }
+}
