@@ -66,7 +66,7 @@ class siteerror extends Controller {
 	 */
 	private static function logerror(Throwable $error) {
 	  $logfile = ROOT_DIR . 'logs/error-' . date('Ymd') . '.txt';
-	  $msg = date('c') . ': ' . $error . '\n';
+	  $msg = date('c') . ': ' . $error . "\n";
 	  file_put_contents($logfile, $msg, FILE_APPEND);
 	}
 }

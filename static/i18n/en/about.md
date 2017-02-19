@@ -1,5 +1,5 @@
 # About Us
-Midt-Norge Airsoft is a voluntary organization whose main purpose is to organize and engage in the sport, recreational activity, and hobby of [Airsoft](#).
+Midt-Norge Airsoft is a voluntary organization whose main purpose is to organize and engage in the sport, recreational activity, and hobby of Airsoft.
 Furthermore, we shall...
 * ... Offer an exciting recreational activity for youth and adults.
 * ... Arrange events / matches.
@@ -19,6 +19,6 @@ Current Board are:
 The Board can be reached via [email](mailto:styre@midtnorgeairsoft.no). The club also has an active [Facebook Page](https://www.facebook.com/groups/198079110278140/).
 
 Some more info:
-* Our statutes can be found [here](#).
+* Our statutes can be found [here](https://midtnorgeairsoft.no/static/files/vedtekter.mna.v1.0.pdf).
 * Our Norwegian bank-account number is 1503.81.61692
 * Our [Vipps](https://www.vipps.no/) number: 66196

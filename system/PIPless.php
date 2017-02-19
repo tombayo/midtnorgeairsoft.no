@@ -60,11 +60,11 @@ class PIPless {
     
     try {
       // Loads the controller file
-      if(!file_exists($path)) Throw New Exception('No controller "'.$controller.'".', 404);
+      if(!file_exists($path)) Throw New Exception('No controller "'.$controller.'"('.$request_url.').', 404);
       require_once($path); 
       
       // Check if the action is callable
-      if(!is_callable([$controller, $action])) Throw New Exception('Not callable "'.$controller.'::'.$action.'".', 404);
+      if(!is_callable([$controller, $action])) Throw New Exception('Not callable "'.$controller.'::'.$action.'"('.$request_url.').', 404);
 
       // Runs the selected method from the selected controller, then exits.
       exit($controller::$action());

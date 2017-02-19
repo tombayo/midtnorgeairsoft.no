@@ -32,7 +32,7 @@
                 <li class="dropdown-header"><?php echo $lang->dict->footer->license; ?>:</li>
                 <li><a href="https://www.gnu.org/licenses/gpl.html">GPLv3</a></li>
                 <li class="dropdown-header"><?php echo $lang->dict->footer->source; ?>:</li>
-                <li><a href="https://github.com/tombayo"><span class="fa fa-github-alt"></span> GitHub</a>
+                <li><a href="https://github.com/tombayo/midtnorgeairsoft.no"><span class="fa fa-github-alt"></span> GitHub</a>
                 <li class="dropdown-header"><?php echo $lang->dict->footer->madeby; ?>:</li>
                 <li><a data-email="uW5E_cANduc5hdYmdu">Tom Andre Munkhaug</a></li>
               </ul>

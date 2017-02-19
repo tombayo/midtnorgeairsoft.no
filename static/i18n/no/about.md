@@ -19,6 +19,6 @@ Gjeldende styre er:
 Styret kan kontaktes på <a data-email="ZNhz_AugONWdzi_5gzZdkNYWd">mail</a>. Klubben har også en aktiv [Facebook-gruppe](https://www.facebook.com/groups/198079110278140/).
 
 Litt mer info:
-* Våre vedtekter finnes [her](#). 
+* Våre vedtekter finnes [her](https://midtnorgeairsoft.no/static/files/vedtekter.mna.v1.0.pdf). 
 * Vårt kontonummer er **1503.81.61692**
 * Vårt Vipps-nummer: **66196**

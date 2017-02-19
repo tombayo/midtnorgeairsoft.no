@@ -49,7 +49,7 @@ For å bli medlem i NASF må du bli medlem i en lokal NASF-registrert klubb. I T
 
 #### Hvordan blir jeg medlem i Midt-Norge Airsoft (MNA)?
 For å bli medlem hos oss er det kun 2 ting du må gjøre:
-1. Fylle ut [registreringskjema](http://) og sende inn til oss.
+1. Fylle ut [registreringskjema](https://midtnorgeairsoft.no/static/files/skjema.innmelding.pdf) og sende inn til oss.
 2. Betale medlemskontingenten, som for øyeblikket er på 400 kroner.
 
 #### Hvor mye koster det å være medlem i MNA?

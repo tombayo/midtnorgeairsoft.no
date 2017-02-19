@@ -22,7 +22,7 @@
       </div>
       <h3><?php echo $lang->dict->headers->map; ?></h3>
       <div class="embed-responsive embed-responsive-16by9">
-        <iframe class="embed-responsive-item" src="http://www.norgeskart.no/dynamisk.html#14/300637/7035430/l/drawing/c23be830ae0c30e1041c6b30f9e3eacc72aa3b89/32633/+embed.box" title="Sætnan Airsoftfield"></iframe>
+        <iframe class="embed-responsive-item" src="https://www.norgeskart.no/dynamisk.html#14/300637/7035430/l/drawing/c23be830ae0c30e1041c6b30f9e3eacc72aa3b89/32633/+embed.box" title="Sætnan Airsoftfield"></iframe>
       </div>
     </div>
   </div>

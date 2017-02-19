@@ -3,10 +3,14 @@
     "main":"Home",
     "about":"About Us",
     "airsoft":"What's Airsoft?",
-    "fields":"Our Fields"
+    "fields":"Our Fields",
+    "information":"Info",
+    "join":"Become a Member"
   },
   "headers":{
-    "welcome":"Welcome to MNA"
+    "welcome":"Welcome to MNA",
+    "images":"Images",
+    "map":"Map"
   },
   "footer":{
     "cookielink":"About Cookies",
