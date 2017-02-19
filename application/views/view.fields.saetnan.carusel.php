@@ -18,13 +18,13 @@
   <!-- Wrapper for slides -->
   <div class="carousel-inner" role="listbox">
     <div class="item active">
-      <img src="http://lorempixel.com/854/480/sports/1" alt="saetnan1">
+      <img src="<?php echo BASE_URL;?>static/images/giefpics.jpg" alt="saetnan1">
       <div class="carousel-caption">
         <p></p>
       </div>
     </div>
     <div class="item">
-      <img src="http://lorempixel.com/854/480/sports/2" alt="saetnan2">
+      <img src="<?php echo BASE_URL;?>static/images/giefpics.jpg" alt="saetnan2">
       <div class="carousel-caption">
         <p></p>
       </div>
