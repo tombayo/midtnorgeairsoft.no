@@ -60,7 +60,7 @@ if ($config['report_errors']) {
 /**#@+
  * Set the session settings
  */
-$session_lifetime = 60*60*24*31;
+$session_lifetime = $config['session_lifetime'];
 session_start(['gc_maxlifetime'=>$session_lifetime]);
 setcookie(session_name(),session_id(),time()+$session_lifetime,"/","",$config['force_https'],true);
 /**#@-*/
