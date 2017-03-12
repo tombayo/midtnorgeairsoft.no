@@ -15,6 +15,9 @@
     
     <link rel="icon" type="image/png" href="static/images/favicon.png" />
     
+    <meta name="description" content="Nettsiden til Midt-Norge Airsoftklubb">
+    <meta name="keywords" content="midt-norge,midt,norge,airsoft,klubb,airsoftklubb,MNA,trøndelag,softgun,soft,gun,milsim">
+    
     <!-- To please our overlords at Facebook -->
     <meta property="og:url" content="https://midtnorgeairsoft.no">
     <meta property="og:site_name" content="Midt-Norge Airsoft">
