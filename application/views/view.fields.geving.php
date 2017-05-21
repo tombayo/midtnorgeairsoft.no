@@ -22,7 +22,7 @@
       </div>
       <h3><?php echo $lang->dict->headers->map; ?></h3>
       <div class="embed-responsive embed-responsive-16by9">
-        <iframe class="embed-responsive-item" src="https://www.norgeskart.no/dynamisk.html#15/294160/7041684/l/drawing/0c40c11b78491c2066e0dab113d2a2957b4593b9/32633/+embed.box" title="Gevingåsen Airsoftfield"></iframe>
+        <iframe class="embed-responsive-item" src="https://www.norgeskart.no/#!?project=norgeskart&layers=1002&zoom=15&lat=7041635.01&lon=294033.53&type=1&marker_lat=7041619.8046875&marker_lon=293919.1533203125" title="Gevingåsen Airsoftfield"></iframe>
       </div>
   	</div>
   </div>
