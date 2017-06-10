@@ -25,6 +25,12 @@
       <hr class="visible-xs">
       <ul class="nav navbar-nav navbar-right">
         <li>
+          <a href="<?php echo $url('admin'); ?>" title="Login">
+            <span class="glyphicon glyphicon-lock"></span>
+          </a>
+        </li>
+        <li>&nbsp;&nbsp;&nbsp;</li>
+        <li>
           <a href="https://www.facebook.com/groups/198079110278140/" title="Vår Facebookgruppe" target="_blank">
             <span class="fa fa-facebook-official"></span>
           </a>

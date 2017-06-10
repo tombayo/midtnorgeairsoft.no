@@ -23,6 +23,8 @@
     <meta property="og:site_name" content="Midt-Norge Airsoft">
     <meta property="og:locale" content="<?php echo $lang; ?>">
     
+    <title>Midt-Norge Airsoft</title>
+    
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>static/css/theme.min.css">
@@ -31,7 +33,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/2.7.0/css/flag-icon.min.css" integrity="sha256-EQjZwW4ljrt9dsonbyX+si6kbxgkVde47Ty9FQehnUg=" crossorigin="anonymous" />
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>static/css/style.css">
-    
-    <title>Midt-Norge Airsoft</title>
+    <?php 
+    if ($controller == 'admin') {
+    ?>
+      <link rel="stylesheet" href="<?php echo BASE_URL; ?>static/css/login.css">
+      <!-- Ionicons -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" integrity="sha256-3iu9jgsy9TpTwXKb7bNQzqWekRX7pPK+2OLj3R922fo=" crossorigin="anonymous" />
+      <!-- AdminLTE -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.11/css/AdminLTE.min.css" integrity="sha256-lrbt+EtA5LBekt2urIreC9u+QqzGsLKb0wEa+KgfVKA=" crossorigin="anonymous" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.11/css/skins/skin-blue.min.css" integrity="sha256-rTttv3Qz9fBq76ZDyUQ9P7YRpL4JafXNzB2CCoyGoOM=" crossorigin="anonymous" />
+    </head>
+    <body class="hold-transition skin-blue sidebar-mini">
+    <?php 
+    } else {
+    ?>
   </head>
   <body>
+<?php }?>

@@ -15,3 +15,4 @@
   	</div>
   </div>
 <?php include('view.footer.php'); ?>
+<?php include('view.scripts.php'); ?>
