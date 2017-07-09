@@ -36,6 +36,11 @@ body {
 	bottom:0;
 	width:100%;
 }
+@media only screen and (max-width: 768px) {
+  .footer {
+    position:static;
+  }
+}
 .footer > .container {
 	background:#EEE;
 	margin-top: 4em;

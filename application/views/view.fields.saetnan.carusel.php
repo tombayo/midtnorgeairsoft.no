@@ -10,28 +10,29 @@
 <div id="carousel-saetnan" class="carousel slide" data-ride="carousel">
   <!-- Indicators -->
   <ol class="carousel-indicators">
-    <li data-target="#carousel-saetnan" data-slide-to="0" class="active"></li>
-    <li data-target="#carousel-saetnan" data-slide-to="1"></li>
-    <li data-target="#carousel-saetnan" data-slide-to="2"></li>
+    <?php 
+      foreach ($album as $i => $img) {
+       ?>
+       <li data-target="#carousel-saetnan" data-slide-to="<?php echo $i; ?>"<?php if($i == 0) echo ' class="active"';?>></li>
+       <?php 
+      }
+    ?>
   </ol>
   
   <!-- Wrapper for slides -->
   <div class="carousel-inner" role="listbox">
-    <div class="item active">
-      <img src="<?php echo BASE_URL;?>static/images/giefpics.jpg" alt="saetnan1">
-      <div class="carousel-caption">
-        <p></p>
-      </div>
-    </div>
-    <div class="item">
-      <img src="<?php echo BASE_URL;?>static/images/giefpics.jpg" alt="saetnan2">
-      <div class="carousel-caption">
-        <p></p>
-      </div>
-    </div>
-    <div class="item">
-      <img src="<?php echo BASE_URL;?>static/images/giefpics.jpg" alt="saetnan3">
-    </div>
+    <?php 
+      foreach ($album as $i => $img) {
+        ?>
+        <div class="item<?php if($i == 0) echo ' active'; ?>">
+          <img src="<?php echo $img['url']; ?>" alt="<?php echo $img['name']; ?>">
+          <div class="carousel-caption">
+            <p></p>
+          </div>
+        </div>
+        <?php
+      }
+    ?>
   </div>
   
   <!-- Controls -->
