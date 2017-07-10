@@ -5,6 +5,7 @@ html {
 body {
 	position:relative;
 	min-height:100%;
+	padding-bottom:10em; /* Size of footer */
 }
 .navbar-main {
 	border-top: 0px;
@@ -35,11 +36,6 @@ body {
 	position:absolute;
 	bottom:0;
 	width:100%;
-}
-@media only screen and (max-width: 768px) {
-  .footer {
-    position:static;
-  }
 }
 .footer > .container {
 	background:#EEE;
