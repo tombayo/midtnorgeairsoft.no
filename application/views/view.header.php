@@ -13,7 +13,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <link rel="icon" type="image/png" href="static/images/favicon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png?v=gAENnqlzOx">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png?v=gAENnqlzOx">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png?v=gAENnqlzOx">
+    <link rel="manifest" href="/static/icons/manifest.json?v=gAENnqlzOx">
+    <link rel="mask-icon" href="/static/icons/safari-pinned-tab.svg?v=gAENnqlzOx" color="#5bbad5">
+    <link rel="shortcut icon" href="/static/icons/favicon.ico?v=gAENnqlzOx">
+    <meta name="msapplication-config" content="/static/icons/browserconfig.xml?v=gAENnqlzOx">
+    <meta name="theme-color" content="#ffffff">
     
     <meta name="description" content="Nettsiden til Midt-Norge Airsoftklubb">
     <meta name="keywords" content="midt-norge, midt, norge, airsoft, klubb, airsoftklubb, MNA, trøndelag, softgun, soft, gun, milsim">
