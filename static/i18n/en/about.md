@@ -10,15 +10,17 @@ Furthermore, we shall...
 The club was created in 2009 and was registered as a voluntary organization in 2016. Our organization's ID is [917 723 656](http://https://w2.brreg.no/enhet/sok/detalj.jsp?orgnr=917723656) .
 Midt-Norge Airsoft is a member of the [Norwegian Airsoft Association](http://www.nasf.no).
 
-We consist of approximately 40 members. The Board currently consists of 3 persons.
-Current Board are:
-* Rino André Holst (Board Leader)
-* Tom Andre Munk Haug (Board member)
-* Stein Ove Hegner (Board member)
+We consist of approximately 40 members. The Board currently consists of 5 persons.
+The Current Board are:
+* Joakim Nicolaysen (Board Leader)
+* Tom Andre Munkhaug (Board member)
+* Stein Ove Hegnes (Board member)
+* Ole Morten Haugvik (Board member)
+* Bent Kvilås (Board member)
 
-The Board can be reached via [email](mailto:styre@midtnorgeairsoft.no). The club also has an active [Facebook Page](https://www.facebook.com/groups/198079110278140/).
+The Board can be reached via <a data-email="ZNhz_AugONWdzi_5gzZdkNYWd">email</a>. The club also has an active [Facebook Page](https://www.facebook.com/groups/198079110278140/).
 
 Some more info:
 * Our statutes can be found [here](https://midtnorgeairsoft.no/static/files/vedtekter.mna.v1.0.pdf).
-* Our Norwegian bank-account number is 1503.81.61692
-* Our [Vipps](https://www.vipps.no/) number: 66196
+* Our Norwegian bank-account number is **1503.81.61692**
+* Our [Vipps](https://www.vipps.no/) number: **66196**

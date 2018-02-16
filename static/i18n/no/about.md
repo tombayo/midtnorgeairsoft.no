@@ -10,11 +10,13 @@ Videre skal vi...
 Klubben ble opprettet i 2009, og ble registrert som frivillig organisasjon i 2016. Vårt organisasjonsnummer er [917 723 656](http://https://w2.brreg.no/enhet/sok/detalj.jsp?orgnr=917723656). 
 Midt-Norge Airsoft er medlem hos [Norges Airsoftforbund](http://www.nasf.no).
 
-Vi består av ca. 40 betalende medlemmer. Styret består av 3 personer. 
+Vi består av ca. 40 betalende medlemmer. Styret består av 5 personer. 
 Gjeldende styre er:
-* Rino André Holst (Leder)
+* Joakim Nicolaysen (Leder)
 * Tom Andre Munkhaug (Styremedlem)
 * Stein Ove Hegnes (Styremedlem)
+* Ole Morten Haugvik (Styremedlem)
+* Bent Kvilås (Styremedlem)
 
 Styret kan kontaktes på <a data-email="ZNhz_AugONWdzi_5gzZdkNYWd">mail</a>. Klubben har også en aktiv [Facebook-gruppe](https://www.facebook.com/groups/198079110278140/).
 

@@ -1,5 +1,4 @@
-The webpage is still under construction, but there is still some content to check out :)
-Some translations are also lacking.
-More content to come.. 
+Hello and welcome!
+By using the menu above you should find the information you're after :)
 
-In the meantime please check out our [Facebook group](https://www.facebook.com/groups/198079110278140/)!
+Otherwise, please check out our [Facebook group](https://www.facebook.com/groups/198079110278140/).
