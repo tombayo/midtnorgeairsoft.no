@@ -50,10 +50,11 @@ For å bli medlem i NASF må du bli medlem i en lokal NASF-registrert klubb. I T
 #### Hvordan blir jeg medlem i Midt-Norge Airsoft (MNA)?
 For å bli medlem hos oss er det kun 2 ting du må gjøre:
 1. Fylle ut [registreringskjema](https://midtnorgeairsoft.no/static/files/skjema.innmelding.pdf) og sende inn til oss.
-2. Betale medlemskontingenten, som for øyeblikket er på 400 kroner.
+2. Betale medlemskontingenten, som for øyeblikket er på 250 kroner.
+3. Betale avgift til NASF (kommer egen på faktura).
 
 #### Hvor mye koster det å være medlem i MNA?
-400 kroner i året, der 150 kroner går til Norges Airsoftforbund, og resten til klubben.
+250 kroner i året til klubben, pluss 150 kroner til Norges Airsoftforbund.
 
 #### Hvorfor bør jeg være medlem i MNA?
 Medlemskapet ditt gir det også medlemskap i Norges Airsoftforbund. Du får da stemmerett i forbundet, slik at du kan påvirke hvordan forbundet skal styres. Medlemskapet i NASF gir deg også tilgang til tannforsikring hvis noe skulle skje under et airsoftspill.
