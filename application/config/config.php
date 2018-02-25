@@ -7,6 +7,8 @@
  * @subpackage config
  */
 
+global $config;
+
 /**
  * Base URL including trailing slash (e.g. http://localhost/)
  * @global string $config['base_url']
