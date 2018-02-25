@@ -42,12 +42,12 @@
         </li>
         <li><span style="width:2em;display:block-inline;"></span></li>
         <li>
-          <a href="<?php echo $url('settings','setlang','',['lang'=>'no']); ?>" title="Norsk">
+          <a href="<?php echo $url('settings','setlang',['lang'=>'no']); ?>" title="Norsk">
             <span class="flag-icon flag-icon-no"></span>
           </a>
         </li>
         <li>
-          <a href="<?php echo $url('settings','setlang','',['lang'=>'en']); ?>" title="English">
+          <a href="<?php echo $url('settings','setlang',['lang'=>'en']); ?>" title="English">
             <span class="flag-icon flag-icon-gb"></span>
           </a>
         </li>

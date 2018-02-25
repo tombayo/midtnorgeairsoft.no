@@ -113,8 +113,8 @@ class admin extends Controller {
       $template->set('controller', __CLASS__);
       $template->set('lang', $i18n);
       $template->set('menu', self::generateMenu($_SESSION['accesslevel']));
-      $template->set('url', function ($controller,$method='',$argument='',$get=[],$frag='') {
-        return parent::createUrl($controller,$method,$argument,$get,$frag);
+      $template->set('url', function ($controller,$method='',$get=[],$frag='') {
+        return parent::createUrl($controller,$method,$get,$frag);
       });
       $template->set('user', self::getUser($_SESSION['user'])->export());
     } else {
@@ -592,8 +592,8 @@ class admin extends Controller {
     $template->set('menu', self::generateMenu($_SESSION['accesslevel']));
     $template->set('feedback', $feedback);
     $template->set('user', self::getUser($_SESSION['user'])->export());
-    $template->set('url', function ($controller,$method='',$argument='',$get=[],$frag='') {
-      return parent::createUrl($controller,$method,$argument,$get,$frag);
+    $template->set('url', function ($controller,$method='',$get=[],$frag='') {
+      return parent::createUrl($controller,$method,$get,$frag);
     });
     $template->render();
   }
@@ -609,8 +609,8 @@ class admin extends Controller {
     $template = Load::view('view.admin.login');
     $template->set('controller', __CLASS__);
     $template->set('lang', $i18n);
-    $template->set('url', function ($controller,$method='',$argument='',$get=[],$frag='') {
-      return parent::createUrl($controller,$method,$argument,$get,$frag);
+    $template->set('url', function ($controller,$method='',$get=[],$frag='') {
+      return parent::createUrl($controller,$method,$get,$frag);
     });
     $template->set('email',$email);
     $template->set('errormsg', $errormsg);

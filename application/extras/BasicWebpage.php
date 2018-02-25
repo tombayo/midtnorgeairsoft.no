@@ -32,8 +32,8 @@ trait BasicWebpage {
     $i18n = new i18nHelper($_SESSION['language'] ?? $config['language']);
     $view->set('controller', __CLASS__);
     $view->set('lang', $i18n);
-    $view->set('url', function ($controller,$method='',$argument='',$get=[],$frag='') {
-      return parent::createUrl($controller,$method,$argument,$get,$frag);
+    $view->set('url', function ($controller,$method='',$get=[],$frag='') {
+      return parent::createUrl($controller,$method,$get,$frag);
     });
     $view->set('menu', self::createMenu($i18n, __CLASS__));
   
@@ -87,13 +87,13 @@ trait BasicWebpage {
         new MenuItem(
           'Gevingåsen',
           (($_GET['fields'] ?? '') == 'geving') ? true:false,
-          parent::createUrl('fields','','',['field'=>'geving'])
+          parent::createUrl('fields','',['field'=>'geving'])
         )
       )->add(
         new MenuItem(
           'Sætnan',
           (($_GET['fields'] ?? '') == 'saetnan') ? true:false,
-          parent::createUrl('fields','','',['field'=>'saetnan'])
+          parent::createUrl('fields','',['field'=>'saetnan'])
         )
       )
     )->add(
