@@ -589,6 +589,7 @@ class admin extends Controller {
     
     $template = Load::view('view.admin.dash');
     $template->set('controller', __CLASS__);
+    $template->set('page', 'index');
     $template->set('lang', $i18n);
     $template->set('menu', self::generateMenu($_SESSION['accesslevel']));
     $template->set('feedback', $feedback);
