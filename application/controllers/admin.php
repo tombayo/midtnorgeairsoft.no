@@ -111,6 +111,7 @@ class admin extends Controller {
       
       $template = Load::view('view.admin.'.$caller);
       $template->set('controller', __CLASS__);
+      $template->set('page', $caller);
       $template->set('lang', $i18n);
       $template->set('menu', self::generateMenu($_SESSION['accesslevel']));
       $template->set('url', function ($controller,$method='',$get=[],$frag='') {
