@@ -24,3 +24,23 @@ CREATE TABLE IF NOT EXISTS person (
   PRIMARY KEY (id),
   FOREIGN KEY(accesslevel) REFERENCES accessgroup(id)
 ) ENGINE=innoDB DEFAULT CHARSET=utf8 ;
+
+CREATE TABLE IF NOT EXISTS voteleader2018candidates (
+  id int(5) NOT NULL UNIQUE,
+  PRIMARY KEY (id),
+  FOREIGN KEY(id) REFERENCES person(id)
+) ENGINE=innoDB DEFAULT CHARSET=utf8 ;
+
+CREATE TABLE IF NOT EXISTS voteleader2018voterid (
+  id int(5) NOT NULL UNIQUE,
+  hash varchar(128) NOT NULL UNIQUE,
+  PRIMARY KEY (id),
+  FOREIGN KEY(id) REFERENCES person(id)
+) ENGINE=innoDB DEFAULT CHARSET=utf8 ;
+
+CREATE TABLE IF NOT EXISTS voteleader2018votes (
+  cryptid varchar(128) NOT NULL UNIQUE,
+  candidateid int(5) NOT NULL,
+  PRIMARY KEY (cryptid),
+  FOREIGN KEY(candidateid) REFERENCES voteleader2018candidates(id)
+) ENGINE=innoDB DEFAULT CHARSET=utf8 ;
