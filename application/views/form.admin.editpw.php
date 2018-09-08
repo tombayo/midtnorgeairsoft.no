@@ -3,7 +3,7 @@
  * The form for changing a user's password 
  * @see view.admin.editpw.php, admin::editpw()
  *
- * @package tennisklubben.net
+ * @package mna
  * @subpackage views
  */
 ?>

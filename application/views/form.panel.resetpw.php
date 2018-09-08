@@ -3,7 +3,7 @@
    * A view for resetting a users password by supplying email.
    * @see admin::resetpw()
    * 
-   * @package tennisklubben.net
+   * @package mna
    * @subpackage views 
    */
 

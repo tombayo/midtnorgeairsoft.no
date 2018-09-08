@@ -53,10 +53,6 @@ class admin extends Controller {
                             'genpw'=>'PW Gen',
                             'php'=>'PHPinfo']
                           ];
-  /**
-   * @var string Full filepath to the shared files folder.
-   */
-  private static $sharefolder = ROOT_DIR.'share/';
   
   /**
    * Generates an array of menu-items based on the supplied accesslevel.
@@ -140,7 +136,6 @@ class admin extends Controller {
       self::viewLogin();
     }
   }
-  
   /**
    * Handles the login-request to admin.
    * 
@@ -194,7 +189,6 @@ class admin extends Controller {
     session_destroy();
     parent::redirect('');
   }
-  
   /**
    * Allows the users to reset their passwords by getting a newly generated
    * password sent to their email.
@@ -221,7 +215,6 @@ class admin extends Controller {
       $template->render(); 
     }
   }
-  
   /**
    * A developer tool for generating hashed passwords in the front-end.
    * Usage: Just go to "admin/genpw?pw=secret" to generate a hash of "secret".
@@ -236,7 +229,6 @@ class admin extends Controller {
       parent::redirect('');
     }
   }
-  
   /**
    * A developer tool for password_hash benchmarking.
    * 
@@ -339,89 +331,15 @@ class admin extends Controller {
     $template->render();
   }
   /**
-   * Loads files from $sharefolder and allows users to rename or delete these
-   * files, aswell as uploading new files to the folder.
+   * Renders a view containing the list of current members in the database.
    * 
-   * This method handles both the uploading of new files, and renaming/deleting
-   * of existing files. Avoids duplicate names by adding a "1." to the front of
-   * the filenames. Deleted files wont actually get deleted, they're only moved
-   * to "deleted/".
-   * 
-   * @see admin::$sharefolder, view.admin.filemanager.php
+   * @see view.admin.members.php
    */
-  public static function filemanager() {
-    $template = self::basicAdminTemplate();
-    $template->set('maxfilesize', ['int'=>(int)(ini_get('upload_max_filesize'))*1000000,
-                                   'txt'=>self::humanFilesize((int)(ini_get('upload_max_filesize'))*1000000)]);
-    
-    if ($_FILES['inputfile']['name'] ?? false) {
-      
-      // A file has been uploaded
-      
-      $destination = self::$sharefolder.basename($_FILES['inputfile']['name']);
-      $i = 0;
-      while (is_file($destination)) {
-        $i++;
-        $destination = self::$sharefolder.$i.'.'.basename($_FILES['inputfile']['name']);
-      }
-      if (move_uploaded_file($_FILES['inputfile']['tmp_name'], $destination)) {
-        $uploadedPathinfo = pathinfo($destination);
-        if (!in_array($uploadedPathinfo['extension'],['php','cgi','py','pl','js','html','shtml'])) {
-          $template->set('success', 'Filen &quot;'.$uploadedPathinfo['filename'].'&quot; ble lastet opp!');
-        } else {
-          unlink($destination);
-          $template->set('error', 'Ulovlig filtype lastet opp. Filen ble slettet.');
-        }
-      } else {
-        $template->set('error', 'Filen ble ikke lastet opp.');
-      }
-    } elseif ($_POST['rename'] ?? false) {
-      
-      // A file has been requested to be renamed
-      
-      $file = self::findFile($_POST['hash'] ?? '', self::$sharefolder);
-      $newname = $_POST['newname'] ?? false;
-      if ($file && $newname) {
-        $oldfile = pathinfo($file);
-        $newname = htmlspecialchars(str_replace(['/','\\'],'',$newname));
-        $newpath = self::$sharefolder.$newname.'.'.$oldfile['extension'];
-        $i = 0;
-        while (is_file($newpath)) {
-          $i++;
-          $newpath = self::$sharefolder.$i.'.'.$newname.'.'.$oldfile['extension'];
-        }
-        if(rename($file,$newpath)) {
-          $template->set('success','Filen &quot;'.$oldfile['filename'].'&quot; endret navn til &quot;'.$newname.'&quot;!');
-        } else {
-          $template->set('error', 'Det skjedde en feil med navneskiftet. Vennligst prøv igjen.');
-        }
-      } else {
-        $template->set('error', 'Det skjedde en feil med navneskiftet. Vennligst prøv igjen.');
-      }
-    } elseif ($_POST['delete'] ?? false) {
-      
-      // A file has been requested to be deleted
-      
-      $file = self::findFile($_POST['hash'] ?? '', self::$sharefolder);
-      $filepathinfo = pathinfo($file);
-      
-      if(self::trashFile($filepathinfo['basename'])) {
-        $template->set('success','Filen &quot;'.$filepathinfo['filename'].'&quot; ble slettet!');
-      } else {
-        $template->set('error','Det skjedde en feil med slettingen. Vennligst prøv igjen.');
-      }
-    }
-    
-    $template->set('files', self::listfiles(self::$sharefolder));
-    $template->render();
-  }
-  
-  
   public static function members() {
     $template = self::basicAdminTemplate();
     $tb = Model::initDB();
     $a = $tb->getDatabaseAdapter();
-    $r = $a->get('SELECT firstname, lastname, email, phonenumber
+    $r = $a->get('SELECT firstname, lastname, email
                   FROM person
                   ORDER BY firstname');
     
@@ -429,152 +347,6 @@ class admin extends Controller {
     
     $template->render();
   }
-  
-  /**
-   * Creates an array of all the files in $folder, with each entry containing
-   * detailed info on the file.
-   * 
-   * @param string $folder
-   * @return array
-   */
-  private static function listfiles(string $folder):array {
-    $filenames = scandir($folder);
-    $files = [];
-    foreach ($filenames as $filename) {
-      $thisfile = $folder.$filename;
-      if (is_file($thisfile)) {
-        $pathinfo = pathinfo($thisfile);
-        $file['name'] = $pathinfo['filename'];
-        $file['ext'] = $pathinfo['extension'];
-        $file['type'] = self::fileExtToType($pathinfo['extension']);
-        $file['url'] = BASE_URL.'share/'.$filename;
-        $file['size'] = self::humanFilesize(filesize($thisfile));
-        $file['mtime'] = filemtime($thisfile);
-        $file['hash'] = sha1_file($thisfile);
-        $files[] = $file;
-      }
-    }
-    return $files;
-  }
-  /**
-   * Searches for a file in $folder by looking at the supplied $hash.
-   * 
-   * @param string $hash SHA1-hash of a file.
-   * @param string $folder
-   * @return string Path to the file if found, empty string if not.
-   */
-  private static function findFile(string $hash, string $folder):string {
-    $files = scandir($folder);
-    $found = '';
-    foreach ($files as $file) {
-      if ($hash == sha1_file($folder.$file)) {
-        $found = $folder.$file;
-        break;
-      }
-    }
-    return $found;
-  }
-  
-  /**
-   * Function to get human readable filesizes.
-   * 
-   * @see http://php.net/manual/en/function.filesize.php#106569
-   * @author rommel@rommelsantor.com
-   * @param int $bytes
-   * @param int $decimals
-   * @return string
-   */
-  private static function humanFilesize(int $bytes, int $decimals = 2):string {
-    $sz = 'BKMGTP';
-    $factor = floor((strlen(strval($bytes)) - 1) / 3);
-    return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$sz[$factor];
-  }
-  /**
-   * Converts a file extension to a string compatible with
-   * Font Awesome's File Type Icons.
-   * @link http://fontawesome.io/icons/#file-type
-   *  
-   * @param string $extension
-   * @return string
-   */
-  private static function fileExtToType(string $extension):string {
-    switch(strtolower($extension)) {
-      case 'pdf':
-        return '-pdf';
-        break;
-      case 'doc':
-      case 'docx':
-      case 'odt':
-        return '-word';
-        break;
-      case 'xls':
-      case 'xlr':
-      case 'xlsx':
-        return '-excel';
-        break;
-      case 'ppt':
-      case 'pptx':
-        return '-powerpoint';
-        break;
-      case 'png':
-      case 'jpg':
-      case 'jpeg':
-      case 'gif':
-      case 'bmp':
-        return '-image';
-        break;
-      case '7z':
-      case 'rar':
-      case 'gz':
-      case 'zip':
-        return '-archive';
-        break;
-      case 'txt':
-      case 'rtf':
-        return '-text';
-        break;
-      case 'm4a':
-      case 'mp3':
-      case 'wav':
-      case 'wma':
-        return '-audio';
-        break;
-      case '3gp':
-      case 'avi':
-      case 'm4v':
-      case 'mov':
-      case 'mp4':
-      case 'mpg':
-      case 'wmv':
-      case 'mkv':
-        return '-video';
-        break;
-      default:
-        return '';
-    }
-  }
-  /**
-   * Moves a file to the trashfolder 'deleted/'. Also avoids filename-conflicts
-   * by adding '1.' to the beginning of conflicting files.
-   * 
-   * @param string $filename
-   * @return bool
-   */
-  private static function trashFile(string $filename):bool {
-    $newpath = self::$sharefolder.'deleted/'.$filename;
-    $i = 0;
-    while (is_file($newpath)) {
-      $i++;
-      $newpath = self::$sharefolder.'deleted/'.$i.'.'.$filename;
-    }
-    if (copy(self::$sharefolder.$filename, $newpath)) {
-      return unlink(self::$sharefolder.$filename);
-    } else {
-      return false;
-    }
-    
-  }
-  
   /**
    * Renders the Dashboard.
    * @see view.admin.dash.php
@@ -618,7 +390,6 @@ class admin extends Controller {
     $template->set('errormsg', $errormsg);
     $template->render();
   }
-  
   /**
    * Checks if the user is logged in and has the privileges needed.
    * 
@@ -733,21 +504,6 @@ class admin extends Controller {
     $v->required($requiredtxt)
     ->email('%s: Feltet må være en gylding epost-adresse.')
     ->validate('email',false,'Epost');
-    $v->required($requiredtxt)
-    ->validate('address',false,'Adresse');
-    $v->required($requiredtxt)
-    ->digits('%s: Feltet må være et gyldig postnummer (bare tall).')
-    ->minlength(4, '%s: Feltet må være et gyldig postnummer (minst 4 siffer).')
-    ->maxlength(4, '%s: Feltet må være et gyldig postnummer (max 4 siffer).')
-    ->setRule('validpostcode', function($val){
-      return self::checkPostcode($val);
-    },'%s: Postnummeret eksisterer ikke.');
-    $v->validate('postcode',false,'Postnummer');
-    $v->required($requiredtxt)
-    ->digits('%s: Feltet må være et gyldig telefonnummer (bare tall).')
-    ->minlength(8, '%s: Feltet må være et gyldig telefonnummer (minst 8 siffer).')
-    ->maxlength(8, '%s: Feltet må være et gyldig telefonnummer (max 8 siffer).')
-    ->validate('phonenumber',false,'Telefonnummer');
     return $v;
   }
   /**
@@ -769,41 +525,13 @@ class admin extends Controller {
     if (is_null($user->password) || $forceFullUpdate) {
       $user->firstname = $post['firstname'];
       $user->lastname = $post['lastname'];
-      $user->address = $post['address'];
-      $user->postcode = $post['postcode'];
     }
     if ($forceFullUpdate) {
       $user->email = $post['email'];
-      $user->phonenumber = $post['phonenumber'];
     }
     if ($user->accesslevel == 0) {
       $user->accesslevel = 1;
     }
     return $rb->store($user);
-  }
-  /**
-   * Checks the validity of the supplied postcode.
-   *
-   * @param string $postnr Postcode
-   * @return bool
-   */
-  public static function checkPostcode(string $postcode):bool {
-    if (is_numeric($postcode) &&
-      $postcode > 0 &&
-      $postcode < 9999) {
-        $tb = Model::initDB();
-        $rb = $tb->getRedBean();
-        
-        $place = $rb->load('postplace',intval($postcode));
-        
-        if($place->id ?? false) {
-          return true;
-        } else {
-          return false;
-        }
-        
-      } else {
-        return false;
-      }
   }
 }

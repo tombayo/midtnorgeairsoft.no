@@ -33,7 +33,6 @@
                       echo '<tr>';
                       echo '<td>'.ucfirst($row['firstname']).' '.ucfirst($row['lastname']).'</td>';
                       echo '<td>'.$row['email'].'</td>';
-                      echo '<td>'.$row['phonenumber'].'</td>';
                       echo '</tr>';
                     }
                   } else {
