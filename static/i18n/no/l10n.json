@@ -20,5 +20,78 @@
     "license":"Lisens",
     "source":"Kildekode",
     "madeby":"Laget av"
+  },
+  "general":{
+    "name":"navn",
+    "firstname":"fornavn",
+    "lastname":"etternavn",
+    "email":"email",
+    "role":"rolle",
+    "back":"tilbake",
+    "save":"lagre",
+    "confirm":"bekreft"
+  },
+  "adminnav":{
+    "index":"Hjem",
+    "members":"Medlemmer",
+    "vote":"Klubbvalg"
+  },
+  "adminusercontrols":{
+    "logout":"Logg ut",
+    "changepw":"Endre passord",
+    "changeinfo":"Endre personalia",
+    "pleaselogin":"Vennligst logg inn",
+    "emailaddress":"Epost-adresse",
+    "password":"Passord",
+    "rememberme":"Husk meg",
+    "forgotpw":"Glemt passord",
+    "login":"Logg inn",
+    "currentpw":"Nåværende Passord",
+    "newpw":"Nytt Passord",
+    "repeatnewpw":"Gjenta Nytt Passord",
+    "changepwexplained":"Skriv inn din e-post nedenfor. Et nytt passord blir da sendt til din epost."
+  },
+  "adminpagemembers":{
+    "members":"Medlemmer",
+    "membersmna":"Medlemmer i Midt-Norge Airsoft",
+    "noone":"Ingen her :("
+  },
+  "adminpagevote":{
+    "clubvote":"Klubbvalg",
+    "voteleader":"Valg av klubbleder",
+    "givevote":"Avgi din Stemme"
+  },
+  "adminerrorlogin":{
+    "errorcreds":"Feil Epost/Passord"
+  },
+  "adminerrorresetpw":{
+    "success":"Sjekk e-posten din for nytt passord.",
+    "errorgenerate":"En feil skjedde med genereringen av nytt passord, prøv igjen.",
+    "emailnoexist":"E-posten finnes ikke."
+  },
+  "admineditpw":{
+    "valrequired":"Feltet må fylles ut.",
+    "valpwnotequals":"Passordene er ikke like.",
+    "errorpw":"Feil Passord",
+    "success":"Passordet ble endret!"
+  },
+  "adminedituser":{
+    "success":"Informasjonen ble endret!"
+  },
+  "adminvote":{
+    "alreadyvoted":"Du har allerede stemt.",
+    "choosecandidate":"Vennligst velg en kandidat først.",
+    "invalidcandidate":"Ugyldig kandidat.",
+    "noaccess":"Du har ikke tilgang til dette valget."
+  },
+  "adminpwmail":{
+    "subject":"Passord midtnorgeairsoft.no",
+    "noreply":"ikkesvar",
+    "greeting":"Hei",
+    "newpw":"Det har blitt laget et nytt passord til deg på Midtnorgeairsoft.no",
+    "pwis":"Passordet er:",
+    "pwinfo":"Passordet benyttes sammen med din E-post adresse for å logge inn på våre nettsider.",
+    "pwchange":"Når du er logget inn har du mulighet til å endre passord, dette anbefales på det sterkeste.",
+    "signature":"Hilsen Midt-Norge Airsoft"
   }
 }

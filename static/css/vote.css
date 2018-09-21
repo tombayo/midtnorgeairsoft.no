@@ -1,0 +1,8 @@
+li[data-vote]:hover {
+  background-color: rgba(0,0,0,.25);
+  cursor: pointer;
+}
+li[data-vote].vote-selected {
+  background-color: #1a9f5f;
+  border-radius: 5px;
+}

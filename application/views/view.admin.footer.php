@@ -5,5 +5,5 @@
         v2.0.0
       </div>
       <!-- Default to the left -->
-      Midt-Norge Airsoft Administrasjonsystem
+      Midt-Norge Airsoft Adminsystem
     </footer>

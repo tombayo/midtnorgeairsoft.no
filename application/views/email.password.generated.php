@@ -11,15 +11,15 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>Passord midtnorgeairsoft.no</title>
+		<title>$lang->dict->adminpwmail->subject</title>
 	</head>
 	<body>
-		<p>Hei, <?php echo ucwords($user['firstname']); ?></p>
-		<p>Det har blitt laget et nytt passord til deg på Midtnorgeairsoft.no.<br>Passordet er:</p>
+		<p><?php echo $lang->dict->adminpwmail->greeting; ?>, <?php echo ucwords($user['firstname']); ?></p>
+		<p><?php echo $lang->dict->adminpwmail->newpw; ?><br><?php echo $lang->dict->adminpwmail->pwis; ?></p>
 		<blockquote><?php echo $temppw; ?></blockquote>
-		<p>Passordet benyttes sammen med din E-post adresse for å logge inn på våre nettsider.</p>
-		<p>Når du er logget inn har du mulighet til å endre passord, dette er å anbefale.</p>
+		<p><?php echo $lang->dict->adminpwmail->pwinfo; ?></p>
+		<p><?php echo $lang->dict->adminpwmail->pwchange; ?></p>
 	  <p>&nbsp;</p>
-	  <p>Hilsen Midt-Norge Airsoft</p>
+	  <p><?php echo $lang->dict->adminpwmail->signature; ?></p>
 	</body>
 </html>

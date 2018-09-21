@@ -49,6 +49,9 @@
       <!-- AdminLTE -->
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.11/css/AdminLTE.min.css" integrity="sha256-lrbt+EtA5LBekt2urIreC9u+QqzGsLKb0wEa+KgfVKA=" crossorigin="anonymous" />
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.11/css/skins/skin-blue.min.css" integrity="sha256-rTttv3Qz9fBq76ZDyUQ9P7YRpL4JafXNzB2CCoyGoOM=" crossorigin="anonymous" />
+      <?php
+        if ($page == 'vote') echo '<link rel="stylesheet" href="'.BASE_URL.'static/css/vote.css">';
+      ?>
     </head>
     <body class="hold-transition skin-blue sidebar-mini">
     <?php 

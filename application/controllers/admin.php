@@ -37,23 +37,11 @@ class admin extends Controller {
                                 'editpw'  => 1,
                                 'edituser'=> 1,
                                 'members' => 5,
+                                'vote'    => 5,
                                 'benchpw' => 9,
                                 'genpw'   => 9,
                                 'php'     => 9
                                 ];
-  /**
-   * Specifies each item in the admin-menu with controller-name => UI-text.
-   * A submenu can be specified by UI-text => array(controller-name => UI-text).
-   * @var array
-   */
-  private static $menu = ['index'=>'Hjem',
-                          'members'=>'Medlemmer',
-                          'Utvikler-verktøy'=>[
-                            'benchpw'=>'PW Bench',
-                            'genpw'=>'PW Gen',
-                            'php'=>'PHPinfo']
-                          ];
-  
   /**
    * Generates an array of menu-items based on the supplied accesslevel.
    * 
@@ -65,8 +53,22 @@ class admin extends Controller {
    * @param int $accesslvl
    * @return array
    */
-  private static function generateMenu(int $accesslvl=5):array {
-    $menu = [];
+  private static function generateMenu(int $accesslvl=5, $i18n):array {
+    
+      /**
+       * Specifies each item in the admin-menu with controller-name => UI-text.
+       * A submenu can be specified by UI-text => array(controller-name => UI-text).
+       * @var array
+       */
+      $menu = [ 'index'=>$i18n->dict->adminnav->index,
+                'members'=>$i18n->dict->adminnav->members,
+                'vote'=>$i18n->dict->adminnav->vote.'(Test)',
+                'Developer Tools:'=>[
+                  'benchpw'=>'PW Bench',
+                  'genpw'=>'PW Gen',
+                  'php'=>'PHPinfo']
+              ];
+              
     foreach (self::$menu as $key => $value) {
       if (is_array($value)) {
         foreach ($value as $subkey => $subvalue) {
@@ -109,7 +111,7 @@ class admin extends Controller {
       $template->set('controller', __CLASS__);
       $template->set('page', $caller);
       $template->set('lang', $i18n);
-      $template->set('menu', self::generateMenu($_SESSION['accesslevel']));
+      $template->set('menu', self::generateMenu($_SESSION['accesslevel'],$i18n));
       $template->set('url', function ($controller,$method='',$get=[],$frag='') {
         return parent::createUrl($controller,$method,$get,$frag);
       });
@@ -149,6 +151,8 @@ class admin extends Controller {
     if (isset($_SESSION['user']) || !isset($_POST['email'])) {
       parent::redirect('');
     } else {
+      global $config;
+      $i18n = new i18nHelper($_SESSION['language'] ?? $config['language']);
       $tb = Model::initDB();
       $f = new RedBeanPHP\Finder($tb);
       $user = $f->findOne('person',' email = ? ',[$_POST['email']]);
@@ -156,7 +160,7 @@ class admin extends Controller {
         if (password_verify($_POST['password'], $user->password)) {
           if (password_needs_rehash($user->password, PASSWORD_DEFAULT)) {
             // Password needs rehashing
-            $user->password = self::createPassword($_POST['password']);
+            $user->password = self::hashPassword($_POST['password']);
             $tb->getRedBean()->store($user);
           }
           // Email and password checks out, now logged in
@@ -165,11 +169,11 @@ class admin extends Controller {
           parent::redirect('admin');
         } else {
           // Password is wrong
-          self::viewLogin('Feil Epost/Passord',$_POST['email']);
+          self::viewLogin($i18n->dict->adminerrorlogin->errorcreds,$_POST['email']);
         }
       } else {
         // Email not found
-        self::viewLogin('Feil Epost/Passord');
+        self::viewLogin($i18n->dict->adminerrorlogin->errorcreds);
       }
     }
   }
@@ -194,37 +198,39 @@ class admin extends Controller {
    * password sent to their email.
    */
   public static function resetpw() {
+    global $config;
+    $i18n = new i18nHelper($_SESSION['language'] ?? $config['language']);
+
     if ($_POST['email'] ?? false) {
       $tb = Model::initDB();
       $f = new RedBeanPHP\Finder($tb);
       $user = $f->findOne('person',' email = ? ',[$_POST['email']]);
       if ($user) {
         if (self::makeUserRandomPassword(intval($user->id))) {
-          self::viewLogin('Sjekk e-posten din for nytt passord',$_POST['email']);
+          self::viewLogin($i18n->dict->adminerrorresetpw->success,$_POST['email']);
         } else {
-          self::viewLogin('En feil skjedde med genereringen av nytt passord, prøv igjen.', $_POST['email']);
+          self::viewLogin($i18n->dict->adminerrorresetpw->errorgenerate, $_POST['email']);
         }
       } else {
-        self::viewLogin('E-posten finnes ikke.');
+        self::viewLogin($i18n->dict->adminerrorresetpw->emailnoexist);
       }
     } else {
-      global $config;
       $template = Load::view('form.panel.resetpw');
       $template->set('page', 'admin.resetpw');
-      $template->set('lang', $config['language']);
+      $template->set('lang', $i18n);
       $template->render(); 
     }
   }
   /**
    * A developer tool for generating hashed passwords in the front-end.
    * Usage: Just go to "admin/genpw?pw=secret" to generate a hash of "secret".
-   * @see admin::createPassword()
+   * @see admin::hashPassword()
    * 
    * @param string $pw
    */
   public static function genpw() {
     if (self::isLoggedIn(self::$menuaccess[__FUNCTION__])) {
-      echo self::createPassword($_GET['pw'] ?? '');
+      echo self::hashPassword($_GET['pw'] ?? '');
     } else {
       parent::redirect('');
     }
@@ -277,25 +283,26 @@ class admin extends Controller {
    */
   public static function editpw() {
     $template = self::basicAdminTemplate();
+    $i18n = $template->get('lang');
       
     if (isset($_POST['submit'])) {
       Load::plugin('php-val/validator');
       $v = new Validator($_POST);
-      $requiredtxt = '%s: Feltet må fylles ut.';
+      $requiredtxt = '%s: '.$i18n->dict->admineditpw->valrequired;
       
-      $v->required($requiredtxt)->validate('oldpw',false,'Nåværende Passord');
-      $v->required($requiredtxt)->matches('newpw2', 'Gjenta Nytt Passord', '%s: Passordene er ikke like.')
+      $v->required($requiredtxt)->validate('oldpw',false,$i18n->dict->adminusercontrols->currentpw);
+      $v->required($requiredtxt)->matches('newpw2', $i18n->dict->adminusercontrols->repeatnewpw, '%s: '.$i18n->dict->admineditpw->valpwnotequals)
         ->validate('newpw',false,'Nytt Passord');
       if (!$v->hasErrors()) {
         $tb = Model::initDB();
         $rb = $tb->getRedBean();
         $user = $rb->load('person',$_SESSION['user']);
         if (password_verify($_POST['oldpw'], $user->password)) {
-          $user->password = self::createPassword($_POST['newpw']);
+          $user->password = self::hashPassword($_POST['newpw']);
           $rb->store($user);
-          $template->set('success', 'Passordet ble endret!');
+          $template->set('success', $i18n->dict->admineditpw->success);
         } else {
-          $template->set('errors', ['Nåværende Passord'=>'Feil Passord']);
+          $template->set('errors', [$i18n->dict->adminusercontrols->currentpw => $i18n->dict->admineditpw->errorpw]);
         }
       } else {
         $template->set('errors', $v->getAllErrors());
@@ -311,7 +318,8 @@ class admin extends Controller {
    */
   public static function edituser() {
     $template = self::basicAdminTemplate();
-      
+    $i18n = $template->get('lang');
+
     if (isset($_POST['submit'])) {
       // validate, and make changes
       $_POST = array_map('admin::strfix', $_POST);
@@ -319,7 +327,7 @@ class admin extends Controller {
       if (!$val->hasErrors()) {
         self::updateUser($_SESSION['user'], $_POST, true);
         $template->set('formdata',self::getUser($_SESSION['user'])->export());
-        $template->set('success', 'Informasjonen ble endret!');
+        $template->set('success', $i18n->dict->adminedituser->success);
       } else {
         $template->set('formdata', $_POST);
         $template->set('errors', $val->getAllErrors());
@@ -339,12 +347,87 @@ class admin extends Controller {
     $template = self::basicAdminTemplate();
     $tb = Model::initDB();
     $a = $tb->getDatabaseAdapter();
-    $r = $a->get('SELECT firstname, lastname, email
-                  FROM person
-                  ORDER BY firstname');
+    $r = $a->get('SELECT p.firstname, p.lastname, p.email, ag.groupname
+                  FROM person p, accessgroup ag
+                  WHERE p.accesslevel=ag.id
+                  ORDER BY p.firstname');
     
     $template->set('dbdata',$r);
     
+    $template->render();
+  }
+  /**
+   * Renders a view for voting
+   */
+  public static function vote() {
+    $required_accesslvl = self::$menuaccess['vote'];
+    $db_voterid         = 'votetest1voterid';
+    $db_votes           = 'votetest1votes';
+    $db_candidates      = 'votetest1candidates';
+
+    $template = self::basicAdminTemplate();
+    $tb = Model::initDB();
+    $a = $tb->getDatabaseAdapter();
+
+    $userid = $_SESSION['user'];
+    $i18n = $template->get('lang');
+
+    $uservoted = $a->get('SELECT id FROM '.$db_voterid.' WHERE id = ?',[$userid]);
+    $candidates = $a->get('SELECT p.id,p.firstname,p.lastname
+                           FROM person p, '.$db_candidates.' c
+                           WHERE c.id=p.id');
+    try {
+      // check if user already has voted:
+      if ($uservoted) throw new Exception($i18n->dict->adminvote->alreadyvoted);
+      
+      // Check if form is submitted (not really an error if not):
+      if (!isset($_POST['submit'])) throw new Exception('Not submitted, non-error',2); 
+      
+      // check if a candidate has been chosen before submit:
+      if (!$_POST['vote']) throw new Exception($i18n->dict->adminvote->choosecandidate,1);
+
+      // check if candidate exists in db:
+      $candidateIDs = [];
+      foreach ($candidates as $candidate) {
+        $candidateIDs[] = $candidate['id'];
+      }
+      if (!in_array($_POST['vote'], $candidateIDs)) throw new Exception($i18n->dict->adminvote->invalidcandidate,1);
+      
+      // check if user has high enough accesslevel:
+      if ($_SESSION['accesslevel'] < $required_accesslvl) throw new Exception($i18n->dict->adminvote->noaccess);
+
+      // generate random key:
+      $rnd_key = bin2hex(openssl_random_pseudo_bytes(32));
+
+      // add hash of random key and user ID to voteleader2018voterid:
+      $hash = self::hashPassword($rnd_key);
+      $a->exec('INSERT INTO '.$db_voterid.'
+                (id, hash) VALUES(
+                :id, :hash
+                );', ['id'=>$userid,'hash'=>$hash]);
+
+      // encrypt voter id with key above and store with candidate id in voteleader2018votes:
+      $cipher = "aes-256-cbc";
+      /**
+       * A comment to the following line of code:
+       * Intentionally using a non-random iv when encrypting to produce the same
+       * ciphertext when the same key and plaintext is used. This is to prevent duplicate
+       * votes in the database, as the database is configured to only allow unique entries
+       * in the "cryptid" column.
+       */
+      $crypt_voterid = openssl_encrypt(''.$userid, $cipher, $rnd_key,0,'a non-random iv ');
+      $a->exec('INSERT INTO '.$db_votes.'
+                (cryptid, candidateid) VALUES(
+                :id, :candidate
+                );', ['id'=>$crypt_voterid,'candidate'=>$_POST['vote']]);
+      
+      // present user with key and success-message.
+      $template->set('voterkey', $rnd_key);
+
+    } catch (Throwable $e) {
+      if (($e->getCode() == 1)||($e->getCode() == 2)) $template->set('candidates',$candidates);
+      if ($e->getCode() != 2) $template->set('errors', $e);
+    }
     $template->render();
   }
   /**
@@ -363,7 +446,7 @@ class admin extends Controller {
     $template->set('controller', __CLASS__);
     $template->set('page', 'index');
     $template->set('lang', $i18n);
-    $template->set('menu', self::generateMenu($_SESSION['accesslevel']));
+    $template->set('menu', self::generateMenu($_SESSION['accesslevel'],$i18n));
     $template->set('feedback', $feedback);
     $template->set('user', self::getUser($_SESSION['user'])->export());
     $template->set('url', function ($controller,$method='',$get=[],$frag='') {
@@ -434,7 +517,7 @@ class admin extends Controller {
    * @param string $password
    * @return string password-hash
    */
-  private static function createPassword(string $password):string {
+  private static function hashPassword(string $password):string {
     return password_hash($password, PASSWORD_DEFAULT, self::$pwsettings);
   }
   /**
@@ -450,18 +533,19 @@ class admin extends Controller {
     $user = $rb->load('person',$userid);
     if ($user) {
       $rndstring = substr(md5(strval(rand())),0,8);
-      $user->password = self::createPassword($rndstring);
+      $user->password = self::hashPassword($rndstring);
       if ($rb->store($user)) {
+        global $config;
         $email = Load::view('email.password.generated');
         $email->set('temppw',$rndstring);
         $email->set('user',$user->export());
+        $i18n = $email->set('lang',new i18nHelper($_SESSION['language'] ?? $config['language']));
         $content = $email->render(true);
-        $subject = 'Passord midtnorgeairsoft.no';
         $headers   = [];
         $headers[] = 'MIME-Version: 1.0';
         $headers[] = 'Content-type: text/html; charset=utf-8';
-        $headers[] = 'From: "Midt-Norge Airsoft" <ikkesvar@midtnorgeairsoft.no>';
-        $headers[] = 'Subject: '.$subject;
+        $headers[] = 'From: "Midt-Norge Airsoft" <'.$i18n->dict->adminpwmail->noreply.'@midtnorgeairsoft.no>';
+        $headers[] = 'Subject: '.$i18n->dict->adminpwmail->subject;
         $to = '"'.ucwords($user->firstname).' '.ucwords($user->lastname).'" <'.$user->email.'>';
         try {
           mail($to, $subject, $content, implode("\r\n", $headers));

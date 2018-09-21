@@ -48,10 +48,14 @@
                 <li class="user-body">
                   <div class="row">
                     <div class="col-xs-6 text-center">
-                      <a class="btn btn-default btn-flat" href="<?php echo $url('admin','edituser'); ?>">Endre personalia</a>
+                      <a class="btn btn-default btn-flat" href="<?php echo $url('admin','edituser'); ?>">
+                        <?php echo $lang->dict->adminusercontrols->changeinfo; ?>
+                      </a>
                     </div>
                     <div class="col-xs-6 text-center">
-                      <a class="btn btn-default btn-flat" href="<?php echo $url('admin','editpw'); ?>">Endre passord</a>
+                      <a class="btn btn-default btn-flat" href="<?php echo $url('admin','editpw'); ?>">
+                        <?php echo $lang->dict->adminusercontrols->changepw; ?>
+                      </a>
                     </div>
                   </div>
                   <!-- /.row -->
@@ -59,7 +63,9 @@
                 <!-- Menu Footer-->
                 <li class="user-footer">
                   <div class="pull-right">
-                    <a class="btn btn-default btn-flat" href="<?php echo $url('admin','logout'); ?>">Logg ut</a>
+                    <a class="btn btn-default btn-flat" href="<?php echo $url('admin','logout'); ?>">
+                      <?php echo $lang->dict->adminusercontrols->logout; ?>
+                    </a>
                   </div>
                 </li>
               </ul>
@@ -80,6 +86,7 @@
             $icons = [
               'index'=>'fa-home',
               'members'=>'fa-users',
+              'vote'=>'fa-check-square-o',
               'benchpw'=>'fa-tachometer',
               'genpw'=>'fa-key',
               'php'=>'fa-info'

@@ -3,7 +3,7 @@
  * Configuration file for the application.
  * 
  * 
- * @package pipless
+ * @package MNA
  * @subpackage config
  */
 
