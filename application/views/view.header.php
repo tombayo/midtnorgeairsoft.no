@@ -12,6 +12,9 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Some metadata for JS to parse -->
+    <meta name="urlrewrite" content="<?php global $config; echo $config['url_rewrite'] ? 'true':'false'; ?>"/>
     
     <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png?v=gAENnqlzOx">
     <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png?v=gAENnqlzOx">

@@ -33,14 +33,16 @@ class admin extends Controller {
    * 
    * @var array
    */
-  private static $menuaccess = ['index'   => 5,
-                                'editpw'  => 1,
-                                'edituser'=> 1,
-                                'members' => 5,
-                                'vote'    => 5,
-                                'benchpw' => 9,
-                                'genpw'   => 9,
-                                'php'     => 9
+  private static $menuaccess = ['index'       => 5,
+                                'editpw'      => 1,
+                                'edituser'    => 1,
+                                'editpersons' => 6,
+                                'members'     => 5,
+                                'vote'        => 5,
+                                'benchpw'     => 9,
+                                'genpw'       => 9,
+                                'testmail'    => 9,
+                                'php'         => 9
                                 ];
   /**
    * Generates an array of menu-items based on the supplied accesslevel.
@@ -62,27 +64,29 @@ class admin extends Controller {
        */
       $menu = [ 'index'=>$i18n->dict->adminnav->index,
                 'members'=>$i18n->dict->adminnav->members,
+                'editpersons'=>$i18n->dict->adminnav->editpersons,
                 'vote'=>$i18n->dict->adminnav->vote.'(Test)',
                 'Developer Tools:'=>[
                   'benchpw'=>'PW Bench',
                   'genpw'=>'PW Gen',
+                  'testmail'=>'Test Mail',
                   'php'=>'PHPinfo']
               ];
               
-    foreach (self::$menu as $key => $value) {
+    foreach ($menu as $key => $value) {
       if (is_array($value)) {
         foreach ($value as $subkey => $subvalue) {
           if (self::$menuaccess[$subkey] <= $accesslvl) {
-            $menu[$key][$subkey] = $subvalue;
+            $newmenu[$key][$subkey] = $subvalue;
           }
         }
       } else {
         if (self::$menuaccess[$key] <= $accesslvl) {
-          $menu[$key] = $value;
+          $newmenu[$key] = $value;
         }
       }
     }
-    return $menu;
+    return $newmenu;
   }
   /**
    * Creates a basic template preset with the most common settings used
@@ -276,6 +280,46 @@ class admin extends Controller {
     }
   }
   /**
+   * A developer tool for testing the mail function.
+   */
+  public static function testmail() {
+    if (self::isLoggedIn(self::$menuaccess[__FUNCTION__])) {
+      $to = $_GET['to'] ?? 'test@tombayo.com';
+      $subject = 'Test';
+      $content = "
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset=\"utf-8\">
+            <title>$subject</title>
+          </head>
+          <body>
+            <h1>Test!</h1>
+          </body>
+        </html>";
+      $headers   = [];
+      $headers[] = 'MIME-Version: 1.0';
+      $headers[] = 'Content-type: text/html; charset=utf-8';
+      $headers[] = 'From: "Midt-Norge Airsoft" <ikkesvar@midtnorgeairsoft.no>';
+      $headers[] = 'Subject: '.$subject;
+      try {
+        $sent = mail($to, $subject, $content, implode("\r\n", $headers));
+        if (!$sent) throw new Exception('mail() returned false.');
+        echo "Mail sendt to: ".$to;
+      } catch (Throwable $e) {
+        echo "Something went wrong: <br>\n";
+        echo $e->getMessage();
+        echo "<br>\n";
+        echo "To: ".$to."<br>\n";
+        echo "Subject: ".$subject."<br>\n";
+        echo "Content: ".htmlentities($content)."<br>\n";
+        echo "Headers: ".htmlentities(implode("\r\n", $headers));
+      }
+    } else {
+      parent::redirect('');
+    }
+  }
+  /**
    * Renders a view to allow logged in users to change their passwords.
    * Also handles the form-data POSTed from this view.
    * 
@@ -337,6 +381,112 @@ class admin extends Controller {
       $template->set('formdata',self::getUser($_SESSION['user'])->export());
     }
     $template->render();
+  }
+  /**
+   * Renders a view to allow users to search for persons in the database,
+   * and to change their accesslevels. Also allows for manually adding users
+   * to the database.
+   * 
+   * @see view.admin.persons.php
+   * 
+   */
+  public static function editpersons() {
+    $template = self::basicAdminTemplate();
+    $template->set('accessgroups', self::getAccessGroups());
+    $i18n = $template->get('lang');
+    if ($_POST ?? false) {
+      $post = array_map('admin::strfix', $_POST);
+      $val = self::validateFields($post);
+      try {
+        if ($val->hasErrors()) throw new Exception('Formerror',1);
+        $user = self::findUser($post['email']);
+        if ($user) throw new Exception($i18->dict->admineditpersons->erroruserexists);
+        $user = self::newUser($post);
+        if (!$user) throw new Exception($i18->dict->admineditpersons->errorusergen);
+        $template->set('success',$i18n->dict->admineditpersons->success);
+      } catch(Catchable $e) {
+        $template->set('error', $e->getMessage());
+      } finally {
+        $template->render();
+      }
+    } else {
+      $userid = $_GET['userid'] ?? false;
+      $accesslvl = $_GET['accesslvl'] ?? false;
+      if ($userid && $accesslvl) {
+        $userid = intval($userid);
+        $accesslvl = intval($accesslvl);
+        $user = self::getUser($userid);
+        try {
+          if (!($user->id ?? false)) throw new Exception($i18n->dict->admineditpersons->errornouser);
+          if ($accesslvl == 9) throw new Exception($i18n->dict->admineditpersons->errorinvalidaccessgrp);
+          if (!self::setUserAccessGroup($userid, $accesslvl)) throw new Exception($i18n->dict->admineditpersons->erroraccessgrperror);
+          if (!$user->password) self::makeUserRandomPassword($userid);
+          $template->set('success', $i18n->dict->admineditpersons->accessgrpsuccess);
+        } catch(Throwable $e) {
+          $template->set('error', $e->getMessage());
+        }
+      }
+      $template->render();
+    }
+  }
+  /**
+   * Handles the search-queries from the front-end, and replies in JSON.
+   * 
+   * Allows to search by firstname, lastname or accessgroup.
+   * Does a database search for the selected column. If nothing is found,
+   * the response is just the JSON-object 'empty', otherwise the returned array
+   * from database is encoded to JSON and printed out.
+   * 
+   * @see admin::editpersons(), view.admin.editpersons.php
+   * 
+   */
+  public static function jsonpersons() {
+    if (self::isLoggedIn(self::$menuaccess['editpersons'] ?? 9)) {
+      $stype = $_GET['type'] ?? false;
+      $stext = $_GET['text'] ?? false;
+      if ($stype && $stext) {
+        
+        header("Content-Type: application/json; charset=UTF-8");
+        
+        try {
+          $tb = Model::initDB();
+          $a = $tb->getDatabaseAdapter();
+          
+          // ----- BE CAREFUL WHEN EDITING BELOW ----- \\
+          // Next lines are currently safe, but be very careful when modifying them!
+          // High risk of SQL injection because of a case of avoiding sql-bindings
+          
+          if ($stype === 'firstname') {
+            $dynsql = 'p.firstname';
+          } elseif ($stype === 'lastname') {
+            $dynsql = 'p.lastname';
+          } elseif ($stype === 'accessgroup') {
+            $dynsql = 'ag.groupname';
+          } else {
+            throw new Exception('Unrecognized search-type.');
+          }
+          $r = $a->get('SELECT  p.id, p.firstname, p.lastname, p.email, p.accesslevel, ag.groupname
+                        FROM person p, accessgroup ag
+                        WHERE p.accesslevel=ag.id
+                        AND '.$dynsql.' LIKE ?
+                        ORDER BY p.lastname, p.firstname',['%'.$stext.'%']);
+
+          // ----- END OF POTENTIALLY DANGEROUS CODE ----- \\
+          
+          if ($r[0]['id'] ?? false) {
+            echo json_encode($r);
+          } else {
+            echo json_encode(['empty'=>'true']);
+          }
+        } catch(Throwable $e) {
+          echo json_encode(['error'=>['msg'=>$e->getMessage()]]);
+        }
+      } else {
+        echo json_encode(['error'=>['msg'=>'Inputerror']]);
+      }
+    } else {
+      echo json_encode(['error'=>['msg'=>'Access Denied!']]);
+    }
   }
   /**
    * Renders a view containing the list of current members in the database.
@@ -431,6 +581,29 @@ class admin extends Controller {
     $template->render();
   }
   /**
+   * Renders a view showing votingstatus.
+   */
+  public static function votestatus() {
+    $db_voterid         = 'votetest1voterid';
+    $db_votes           = 'votetest1votes';
+    $db_candidates      = 'votetest1candidates';
+
+    $template = self::basicAdminTemplate();
+    $tb = Model::initDB();
+    $a = $tb->getDatabaseAdapter();
+    
+    $votes = $a->get('SELECT * FROM '.$db_votes);
+    $voters = $a->get('SELECT * FROM '.$db_voterid);
+
+    $numvotes = count($votes);
+    $numvoters = count($voters);
+
+    $template->set('numvotes',$numvotes);
+    $template->set('numvoters',$numvoters);
+    
+    $template->render();
+  }
+  /**
    * Renders the Dashboard.
    * @see view.admin.dash.php
    * 
@@ -465,7 +638,8 @@ class admin extends Controller {
     global $config;
     $template = Load::view('view.admin.login');
     $template->set('controller', __CLASS__);
-    $template->set('lang', $i18n);
+    $template->set('page', 'login');
+    $template->set('lang', new i18nHelper($_SESSION['language'] ?? $config['language']));
     $template->set('url', function ($controller,$method='',$get=[],$frag='') {
       return parent::createUrl($controller,$method,$get,$frag);
     });
@@ -511,6 +685,28 @@ class admin extends Controller {
     return $user;
   }
   /**
+   * Looks for an existing user based on email.
+   * 
+   * @param string $email
+   * @return int $userid, 0 if not found
+   */
+  private static function findUser(string $email):int {
+    $tb = Model::initDB();
+    $a = $tb->getDatabaseAdapter();
+    $userid = 0;
+    $response = $a->get('SELECT id, email FROM person WHERE email=?',[$email]);
+    foreach($response as $row) {
+      if ($userid) {
+        global $config;
+        $err = Load::controller($config['error_controller']);
+        $err->logerror(New Exception('Duplicate users in DB; '.$email.' - '.$tlf));
+      } elseif ($row['email'] == $email) {
+        $userid = $row['id'];
+      }
+    }
+    return intval($userid);
+  }
+  /**
    * Creates a password using settings in $pwsettings.
    * @see admin::$pwsettings
    * 
@@ -544,11 +740,12 @@ class admin extends Controller {
         $headers   = [];
         $headers[] = 'MIME-Version: 1.0';
         $headers[] = 'Content-type: text/html; charset=utf-8';
-        $headers[] = 'From: "Midt-Norge Airsoft" <'.$i18n->dict->adminpwmail->noreply.'@midtnorgeairsoft.no>';
+        $headers[] = 'From: "Midt-Norge Airsoft" <ikkesvar@midtnorgeairsoft.no>';
         $headers[] = 'Subject: '.$i18n->dict->adminpwmail->subject;
         $to = '"'.ucwords($user->firstname).' '.ucwords($user->lastname).'" <'.$user->email.'>';
         try {
-          mail($to, $subject, $content, implode("\r\n", $headers));
+          $sent = mail($to, $i18n->dict->adminpwmail->subject, $content, implode("\r\n", $headers));
+          if (!$sent) throw new Exception();
           return true;
         } catch (Throwable $e) {
           return false;
@@ -617,5 +814,56 @@ class admin extends Controller {
       $user->accesslevel = 1;
     }
     return $rb->store($user);
+  }
+    /**
+   * Creates a new user based on supplied post-data.
+   * 
+   * Assumes post-data has been validated.
+   * 
+   * @param array $post
+   * @return int
+   */
+  private static function newUser(array $post):int {
+    $tb = Model::initDB();
+    $rb = $tb->getRedBean();
+    $user = $rb->dispense('person');
+    $user->firstname = $post['firstname'];
+    $user->lastname = $post['lastname'];
+    $user->email = $post['email'];
+    $user->accesslevel = 1;
+    return $rb->store($user);
+  }
+  /**
+   * Returns the application's accessgroups.
+   * 
+   * @return array
+   */
+  private static function getAccessGroups():array {
+    $tb = Model::initDB();
+    $a = $tb->getDatabaseAdapter();
+    return $a->get('SELECT * FROM accessgroup');
+  }
+    /**
+   * Sets a user's accesslevel.
+   * 
+   * Changes cannot be made to an administrator's accesslevel(=9).
+   * 
+   * @param int $userid
+   * @param int $accesslevel
+   * @return bool
+   */
+  private static function setUserAccessGroup(int $userid, int $accesslevel):bool {
+    try {
+      $tb = Model::initDB();
+      $rb = $tb->getRedBean();
+      $user = $rb->load('person',$userid);
+      if (!$user) throw new Exception;
+      if ($user->accesslevel == 9) throw new Exception;
+      $user->accesslevel = $accesslevel;
+      if (!$rb->store($user)) throw new Exception;
+      return true;
+    } catch(Throwable $e) {
+      return false;
+    }
   }
 }

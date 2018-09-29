@@ -86,9 +86,11 @@
             $icons = [
               'index'=>'fa-home',
               'members'=>'fa-users',
+              'editpersons'=>'fa-user-plus',
               'vote'=>'fa-check-square-o',
               'benchpw'=>'fa-tachometer',
               'genpw'=>'fa-key',
+              'testmail'=>'fa-envelope',
               'php'=>'fa-info'
             ];
           

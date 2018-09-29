@@ -34,7 +34,8 @@
   "adminnav":{
     "index":"Hjem",
     "members":"Medlemmer",
-    "vote":"Klubbvalg"
+    "vote":"Klubbvalg",
+    "editpersons":"Endre medlemmer"
   },
   "adminusercontrols":{
     "logout":"Logg ut",
@@ -86,12 +87,23 @@
   },
   "adminpwmail":{
     "subject":"Passord midtnorgeairsoft.no",
-    "noreply":"ikkesvar",
     "greeting":"Hei",
     "newpw":"Det har blitt laget et nytt passord til deg på Midtnorgeairsoft.no",
     "pwis":"Passordet er:",
     "pwinfo":"Passordet benyttes sammen med din E-post adresse for å logge inn på våre nettsider.",
     "pwchange":"Når du er logget inn har du mulighet til å endre passord, dette anbefales på det sterkeste.",
     "signature":"Hilsen Midt-Norge Airsoft"
+  },
+  "adminnewuser":{
+    "title":"Ny bruker"
+  },
+  "admineditpersons":{
+    "erroruserexists":"Det finnes allerede en bruker med angitt epost.",
+    "errorusergen":"Noe gikk galt under opprettelsen av brukeren.",
+    "success":"Brukeren ble opprettet!",
+    "errornouser":"Brukeren ble ikke funnet.",
+    "errorinvalidaccessgrp":"Ugyldig tilgangsgruppe.",
+    "erroraccessgrperror":"En feil skjedde under lagringen av brukerens tilgangsgruppe.",
+    "accessgrpsuccess":"Tilgangsgruppen ble endret!"
   }
 }
