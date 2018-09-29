@@ -39,6 +39,7 @@ class admin extends Controller {
                                 'editpersons' => 6,
                                 'members'     => 5,
                                 'vote'        => 5,
+                                'votestatus'  => 6,
                                 'benchpw'     => 9,
                                 'genpw'       => 9,
                                 'testmail'    => 9,
@@ -66,6 +67,7 @@ class admin extends Controller {
                 'members'=>$i18n->dict->adminnav->members,
                 'editpersons'=>$i18n->dict->adminnav->editpersons,
                 'vote'=>$i18n->dict->adminnav->vote.'(Test)',
+                'votestatus'=>$i18n->dict->adminnav->votestatus,
                 'Developer Tools:'=>[
                   'benchpw'=>'PW Bench',
                   'genpw'=>'PW Gen',
@@ -594,12 +596,18 @@ class admin extends Controller {
     
     $votes = $a->get('SELECT * FROM '.$db_votes);
     $voters = $a->get('SELECT * FROM '.$db_voterid);
+    $votespercandidate = $a->get('
+      SELECT CONCAT_WS(\' \', p.firstname, p.lastname) AS name, COUNT(*) AS votes
+      FROM person p, votetest1votes v
+      WHERE p.id = v.candidateid
+      GROUP BY v.candidateid');
 
     $numvotes = count($votes);
     $numvoters = count($voters);
 
     $template->set('numvotes',$numvotes);
     $template->set('numvoters',$numvoters);
+    $template->set('votespercandidate',$votespercandidate);
     
     $template->render();
   }
