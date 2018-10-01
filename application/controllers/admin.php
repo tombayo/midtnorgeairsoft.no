@@ -40,6 +40,7 @@ class admin extends Controller {
                                 'members'     => 5,
                                 'vote'        => 5,
                                 'votestatus'  => 6,
+                                'voteverify'  => 5,
                                 'benchpw'     => 9,
                                 'genpw'       => 9,
                                 'testmail'    => 9,
@@ -66,8 +67,11 @@ class admin extends Controller {
       $menu = [ 'index'=>$i18n->dict->adminnav->index,
                 'members'=>$i18n->dict->adminnav->members,
                 'editpersons'=>$i18n->dict->adminnav->editpersons,
-                'vote'=>$i18n->dict->adminnav->vote.'(Test)',
-                'votestatus'=>$i18n->dict->adminnav->votestatus,
+                $i18n->dict->adminnav->vote.'(Test)'=>[
+                  'vote'=>$i18n->dict->adminnav->givevote,
+                  'voteverify'=>$i18n->dict->adminnav->voteverify,
+                  'votestatus'=>$i18n->dict->adminnav->votestatus,
+                ],
                 'Developer Tools:'=>[
                   'benchpw'=>'PW Bench',
                   'genpw'=>'PW Gen',
@@ -559,7 +563,6 @@ class admin extends Controller {
                 );', ['id'=>$userid,'hash'=>$hash]);
 
       // encrypt voter id with key above and store with candidate id in voteleader2018votes:
-      $cipher = "aes-256-cbc";
       /**
        * A comment to the following line of code:
        * Intentionally using a non-random iv when encrypting to produce the same
@@ -567,7 +570,7 @@ class admin extends Controller {
        * votes in the database, as the database is configured to only allow unique entries
        * in the "cryptid" column.
        */
-      $crypt_voterid = openssl_encrypt(''.$userid, $cipher, $rnd_key,0,'a non-random iv ');
+      $crypt_voterid = openssl_encrypt(''.$userid, "aes-256-cbc", $rnd_key,0,'a non-random iv ');
       $a->exec('INSERT INTO '.$db_votes.'
                 (cryptid, candidateid) VALUES(
                 :id, :candidate
@@ -598,7 +601,7 @@ class admin extends Controller {
     $voters = $a->get('SELECT * FROM '.$db_voterid);
     $votespercandidate = $a->get('
       SELECT CONCAT_WS(\' \', p.firstname, p.lastname) AS name, COUNT(*) AS votes
-      FROM person p, votetest1votes v
+      FROM person p, '.$db_votes.' v
       WHERE p.id = v.candidateid
       GROUP BY v.candidateid');
 
@@ -609,6 +612,45 @@ class admin extends Controller {
     $template->set('numvoters',$numvoters);
     $template->set('votespercandidate',$votespercandidate);
     
+    $template->render();
+  }
+  /**
+   * Renders a view to verify a previously casted vote.
+   */
+  public static function voteverify() {
+    $db_voterid         = 'votetest1voterid';
+    $db_votes           = 'votetest1votes';
+    $db_candidates      = 'votetest1candidates';
+
+    $template = self::basicAdminTemplate();
+    $i18n = $template->get('lang');
+
+    if ($_POST['key'] ?? false) {
+      $tb = Model::initDB();
+      $a = $tb->getDatabaseAdapter();
+      $votes = $a->get('SELECT * FROM '.$db_votes);
+      foreach ($votes as $vote) {
+        $cleartxt = openssl_decrypt($vote['cryptid'],"aes-256-cbc",$_POST['key'],0,"a non-random iv ");
+        if ($cleartxt) {
+          $candidate = $a->get('
+            SELECT CONCAT_WS(\' \', firstname, lastname) as name 
+            FROM person
+            WHERE id=?',[$vote['candidateid']]);
+          break;
+        }
+      }
+      if ($candidate ?? false) {
+        if ($_SESSION['user'] == $cleartxt) {
+          $template->set('candidate',$candidate);
+          $template->set('info',$i18n->dict->adminvoteverify->info);
+        } else {
+          $template->set('error',$i18n->dict->adminvoteverify->usererror);
+        }
+      } else {
+        $template->set('error',$i18n->dict->adminvoteverify->error);
+      }
+    } 
+
     $template->render();
   }
   /**

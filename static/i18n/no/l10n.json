@@ -35,7 +35,9 @@
     "index":"Hjem",
     "members":"Medlemmer",
     "vote":"Klubbvalg",
+    "givevote":"Avgi stemme",
     "votestatus":"Status Klubbvalg",
+    "voteverify":"Verifiser Stemme",
     "editpersons":"Endre medlemmer"
   },
   "adminusercontrols":{
@@ -108,5 +110,13 @@
     "errorinvalidaccessgrp":"Ugyldig tilgangsgruppe.",
     "erroraccessgrperror":"En feil skjedde under lagringen av brukerens tilgangsgruppe.",
     "accessgrpsuccess":"Tilgangsgruppen ble endret!"
+  },
+  "adminvoteverify":{
+    "textfield":"Skriv inn nøkkel",
+    "verify":"Verifiser",
+    "verifyvote":"Verifiser Stemme",
+    "error":"Vi finner ingen stemme med den nøkkelen.",
+    "usererror":"Nøkkelen tilhører ikke deg.",
+    "info":"Følgende stemme er registrert på nøkkelen:"
   }
 }
