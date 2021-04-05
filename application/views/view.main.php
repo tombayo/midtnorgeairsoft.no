@@ -9,13 +9,10 @@
 ?>
 <?php include('view.header.php'); ?>
   <div class="container">
-  	<?php include('view.nav.php'); ?>
-    <div class="page-header">
-  		<h1><?php echo $lang->dict->headers->welcome; ?></h1>
-  	</div>
-  	<div class="jumbotron">
-      <?php echo $lang->cont('main.jumbotron'); ?>
-    </div>
+    <img src="<?php echo BASE_URL; ?>static/images/MNA.nasf.jpg" class="main-img">
+    <a href="https://www.facebook.com/groups/198079110278140/" title="Vår Facebookgruppe" target="_blank" style="font-size: xxx-large">
+      <span class="fa fa-facebook-official"></span>
+    </a>
   </div>
-<?php include('view.footer.php'); ?>
+<?php //include('view.footer.php'); ?>
 <?php include('view.scripts.php'); ?>
